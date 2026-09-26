@@ -1,23 +1,28 @@
 package com.afterlife.wow_afterlife_api.controller;
 
-import com.afterlife.wow_afterlife_api.entity.Account;
-import com.afterlife.wow_afterlife_api.repository.AccountRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import com.afterlife.wow_afterlife_api.dto.RegisterRequest;
+import com.afterlife.wow_afterlife_api.service.AccountService;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AccountRepository repository;
+    private final AccountService service;
 
-    public AuthController(AccountRepository repository) {
-        this.repository = repository;
+    public AuthController(AccountService service) {
+        this.service = service;
     }
 
-    @GetMapping("/api/accounts")
-    public List<Account> getAccounts() {
-        return repository.findAll();
+
+    @PostMapping("/register")
+    public String register(
+            @Valid @RequestBody RegisterRequest request
+    ) {
+
+        service.register(request);
+
+        return "OK";
     }
 }
